@@ -4,7 +4,7 @@ import bcrypt
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = "LoginPage"
-app.config['MONGO_URI'] = 'mongodb+srv://Krishna:Krishna_1234@cluster0.q06cohl.mongodb.net/LoginPage?retryWrites=true&w=majority'
+app.config['MONGO_URI'] = 'mongodb+srv://Krishna:Krish_1234@cluster0.q06cohl.mongodb.net/LoginPage?retryWrites=true&w=majority'
 mongo = PyMongo(app)
 
 

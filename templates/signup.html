@@ -71,17 +71,17 @@
 <body>
     <div class="cotainer">
         <form method='POST' action="{{url_for('signup')}}" class="form">
-            <label for="name">Enter Your Name</label>
-            <input type="text" id="email">
+            <label for="name">Enter Username</label>
+            <input type="text" id="username" name="username">
             <label for="email">Enter Your Email</label>
             <input type="email" id="email">
             <label for="password">Enter Password</label>
-            <input type="password" id="password">
+            <input type="password" id="password" name="pass">
             <label for="cpassword">Confirm Password</label>
             <input type="password" id="cpassword">
-            <submit id="btn">Sign Up</submit>
+            <button type="submit" id="btn">Sign Up</button>
             <p>or</p>
-            <button id="btn">Log in</button>
+            <button href="/login" id="btn">Log in</button>
     </form>
     </div>
 </body>
