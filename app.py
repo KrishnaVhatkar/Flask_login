@@ -14,28 +14,29 @@ def home():
         return 'You are logged'
     return render_template('index.html')
 
-@app.route('/signup', methods=['POST', 'GET'])  # Corrected method
+@app.route('/signup', methods=['POST', 'GET'])  
 def signup():
     if request.method == 'POST':
         users = mongo.db.users
         existing_user = users.find_one({'name': request.form['username']})
 
         if existing_user is None:
-            hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({'name': request.form['username'], "password": hashpass})
+            password = (request.form['pass'])
+            users.insert({'name': request.form['username'], "password": password})
             session['username'] = request.form['username']
-            return redirect(url_for('home'))  # Corrected redirect
+            return redirect(url_for('home')) 
 
     return render_template('signup.html')
 
-@app.route('/login', methods=['POST'])  # Corrected method
+@app.route('/login', methods=['POST'])  
 def login():
     users = mongo.db.users
     login_user = users.find_one({"name": request.form['username']})
 
-    if login_user and bcrypt.hashpw(request.form['pass'].encode('utf-8'), login_user['password']) == login_user['password']:
-        session['username'] = request.form['username']
-        return redirect(url_for('home'))
+    if login_user:
+        if bcrypt.hashpw(request.form['pass'].encode('utf-8'), login_user['password']) == login_user['password']:
+            session['username'] = request.form['username']
+            return redirect(url_for('home'))
 
     return 'Invalid username or password'
 
