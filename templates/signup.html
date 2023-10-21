@@ -58,6 +58,7 @@
             font-size: 25px;
             font-weight: 600;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-decoration: none;
 
         }
         #btn:hover{
@@ -70,18 +71,17 @@
 
 <body>
     <div class="cotainer">
-        <form method='POST' action="{{url_for('signup')}}" class="form">
+        <form method='POST' action="{{ url_for('signup') }}" class="form">
             <label for="name">Enter Username</label>
             <input type="text" id="username" name="username">
             <label for="email">Enter Your Email</label>
             <input type="email" id="email">
             <label for="password">Enter Password</label>
-            <input type="password" id="password" name="pass">
-            <label for="cpassword">Confirm Password</label>
-            <input type="password" id="cpassword">
-            <button type="submit" id="btn">Sign Up</button>
+            <input type="password" id="password" name="password">
+
+            <button type="submit" value="submit" id="btn">Sign Up</button>
             <p>or</p>
-            <button href="/login" id="btn">Log in</button>
+            <a href="/login" id="btn">Log in</a>
     </form>
     </div>
 </body>

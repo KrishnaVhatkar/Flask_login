@@ -76,15 +76,15 @@
 
 <body>
     <div class="cotainer">
-        <form method="POST" action="" class="form">
+        <form method="POST" action="{{ url_for('login') }}"  class="form">
             <h2>Login</h2>
             <label for="text" >Enter Your username</label>
             <input type="text" id="username" name="username">
             <label for="password">Enter Password</label>
-            <input type="password" id="password" name="pass">         
-            <input type='submit' id="btn">Log in</input>
+            <input type="password" id="password" name="password">         
+            <input type='submit' value="submit" id="btn">Log in</input>
             <p>or</p>
-            <button href = '/signup' id="btn">Sign Up</button>
+            <a id="btn" href = '/signup' id="btn">Sign Up</a>
     </form>
     </div>
 </body>

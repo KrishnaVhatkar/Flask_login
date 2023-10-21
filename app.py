@@ -1,44 +1,47 @@
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, flash
 from flask_pymongo import PyMongo
 import bcrypt
 
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = "LoginPage"
-app.config['MONGO_URI'] = 'mongodb+srv://Krishna:Krish_1234@cluster0.q06cohl.mongodb.net/LoginPage?retryWrites=true&w=majority'
+app.secret_key = 'your_secret_key_here' 
+app.config['MONGO_URI'] = 'mongodb+srv://Krishna2:Krish_1323@cluster0.q06cohl.mongodb.net/MyDatabase?retryWrites=true&w=majority'
 mongo = PyMongo(app)
 
-
-@app.route('/')
+@app.route('/home')
 def home():
     if 'username' in session:
-        return 'You are logged'
-    return render_template('index.html')
+        return render_template('index.html')
+    return 
 
-@app.route('/signup', methods=['POST', 'GET'])  
+@app.route('/signup', methods=['GET','POST'])
 def signup():
     if request.method == 'POST':
         users = mongo.db.users
         existing_user = users.find_one({'name': request.form['username']})
 
         if existing_user is None:
-            password = (request.form['pass'])
-            users.insert({'name': request.form['username'], "password": password})
+            hashed_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
             session['username'] = request.form['username']
-            return redirect(url_for('home')) 
+            users.insert_one({'name': request.form['username'], 'password': hashed_password})
+            return redirect(url_for('home'))
+        else:
+            flash('Username already exists. Please choose another.', 'error')
 
     return render_template('signup.html')
 
-@app.route('/login', methods=['POST'])  
+@app.route('/', methods=['GET','POST'])
 def login():
-    users = mongo.db.users
-    login_user = users.find_one({"name": request.form['username']})
+    if request.method == 'POST':
+        users = mongo.db.users
+        login_user = users.find_one({'name': request.form['username']})
 
-    if login_user:
-        if bcrypt.hashpw(request.form['pass'].encode('utf-8'), login_user['password']) == login_user['password']:
+        if login_user and bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
             session['username'] = request.form['username']
             return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password. Please try again.', 'error')
 
-    return 'Invalid username or password'
+    return render_template('login.html')
 
-if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+if __name__ == '__main__':
+    app.run(debug=True)
