@@ -2,6 +2,10 @@ from flask import Flask, render_template, url_for, request, session, redirect, f
 from flask_pymongo import PyMongo
 import bcrypt
 
+
+
+
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here' 
 app.config['MONGO_URI'] = 'mongodb+srv://Krishna2:Krish_1323@cluster0.q06cohl.mongodb.net/MyDatabase?retryWrites=true&w=majority'
@@ -45,3 +49,11 @@ def login():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+
+
+
+
