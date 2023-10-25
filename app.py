@@ -14,8 +14,9 @@ mongo = PyMongo(app)
 @app.route('/home')
 def home():
     if 'username' in session:
-        return render_template('index.html')
-    return 
+         username = session['username']
+         return render_template('index.html',username=username)
+    return render_template('login.html')
 
 @app.route('/signup', methods=['GET','POST'])
 def signup():
@@ -46,6 +47,31 @@ def login():
             flash('Invalid username or password. Please try again.', 'error')
 
     return render_template('login.html')
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'username' in session:
+        if request.method == 'POST':
+            users = mongo.db.users
+            new_username = request.form['new_username']
+            new_password = request.form['new_password']
+           
+            if users.find_one({'name': new_username}) is None:
+                users.update_one({'name': session['username']}, {'$set': {'name': new_username, 'password': bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())}})
+                session['username'] = new_username
+                flash('Profile updated successfully', 'success')
+            else:
+                flash('Username already exists. Please choose another.', 'error')
+            return redirect(url_for('home'))
+        return render_template('edit_profile.html')
+    return redirect(url_for('login'))
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('username', None) 
+    flash('You have been logged out', 'success')
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
